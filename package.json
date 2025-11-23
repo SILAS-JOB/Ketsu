@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@heroui/react": "^2.8.5",
-    "@heroui/theme": "^2.4.23",
-    "aceternity-ui": "^0.2.2",
-    "react-bits": "^1.0.5"
-  }
-}
