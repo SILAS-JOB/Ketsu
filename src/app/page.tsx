@@ -1,65 +1,121 @@
-import Image from "next/image";
+"use client";
+
+import DarkVeil from "@/components/ui/DarkVeil";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  NavbarLogo,
+  NavbarButton,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
+import { useState } from "react";
 
 export default function Home() {
+  const navItems = [
+    { name: "Home", link: "/" },
+    { name: "Sobre", link: "/sobre" },
+    { name: "Serviços", link: "/servicos" },
+    { name: "Cases", link: "/cases" },
+    { name: "Contato", link: "/contato" },
+  ];
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="relative min-h-screen bg-black text-white">
+      {/* NAVBAR */}
+      <Navbar className="!fixed !top-0 !left-0 !right-0 !inset-x-0 !z-[9999]">
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+
+          <div className="hidden md:flex items-center gap-3">
+            <NavbarButton href="/contato">Entre em contato ↗</NavbarButton>
+          </div>
+
+          <MobileNav>
+            <MobileNavHeader>
+              <NavbarLogo />
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen((v) => !v)}
+              />
+            </MobileNavHeader>
+
+            <MobileNavMenu
+              isOpen={isMobileMenuOpen}
+              onClose={() => setIsMobileMenuOpen(false)}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.link}
+                  className="block py-2 text-base text-white/80 hover:text-white"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </a>
+              ))}
+
+              <div className="mt-4">
+                <NavbarButton href="/contato">Entre em contato ↗</NavbarButton>
+              </div>
+            </MobileNavMenu>
+          </MobileNav>
+        </NavBody>
+      </Navbar>
+
+      {/* HERO (1 tela) */}
+      <section className="relative h-screen w-screen overflow-hidden">
+        <div className="absolute inset-0">
+          <DarkVeil
+            speed={2.2}
+            noiseIntensity={0.12}
+            scanlineIntensity={0.1}
+            scanlineFrequency={5.0}
+            warpAmount={3.5}
+            resolutionScale={1}
+          />
+        </div>
+
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* só um marcador pra você ver o scroll começar */}
+        <div className="relative z-10 flex h-full items-end justify-center pb-10 text-white/70 text-sm">
+          role pra baixo ↓
+        </div>
+      </section>
+
+      {/* CONTEÚDO EXTRA (pra gerar scroll e testar o resize) */}
+      <section className="mx-auto w-full max-w-6xl px-6 py-24">
+        <h2 className="text-3xl font-semibold">Seção de teste</h2>
+        <p className="mt-4 text-white/70 max-w-2xl">
+          Essa seção é só pra criar altura e permitir scroll. Se a navbar for
+          resizable, ela deve mudar conforme você desce a página.
+        </p>
+
+        {/* blocão alto pra garantir scroll */}
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-44 rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-6"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className="text-white/80 font-medium">Card {i + 1}</div>
+              <div className="mt-2 text-white/60 text-sm">
+                Conteúdo fake pra empurrar a página pra baixo.
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        {/* mais altura ainda */}
+        <div className="mt-16 h-[120vh] rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent" />
+      </section>
+    </main>
   );
 }
